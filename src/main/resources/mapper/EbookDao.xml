@@ -29,7 +29,7 @@
         where id = #{id}
     </select>
 
-    <select id="queryAllList" resultMap="EbookMap">
+    <select id="queryAllList" resultMap="EbookMap" parameterType="com.edmond.wiki.domain.Ebook">
         select id,
                name,
                category1_id,
@@ -39,7 +39,11 @@
                doc_count,
                view_count,
                vote_count
-        from ebook
+        from ebook e
+        where 1=1
+        <if test="name != null and name != ''">
+            and e.name like '%' #{name} '%'
+        </if>
     </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="EbookMap">
