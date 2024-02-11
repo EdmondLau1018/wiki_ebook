@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edmond.wiki.mapper.EbookDao">
+
+    <resultMap type="com.edmond.wiki.domain.Ebook" id="EbookMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="category1Id" column="category1_id" jdbcType="INTEGER"/>
+        <result property="category2Id" column="category2_id" jdbcType="INTEGER"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="cover" column="cover" jdbcType="VARCHAR"/>
+        <result property="docCount" column="doc_count" jdbcType="INTEGER"/>
+        <result property="viewCount" column="view_count" jdbcType="INTEGER"/>
+        <result property="voteCount" column="vote_count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="EbookMap">
+        select id,
+               name,
+               category1_id,
+               category2_id,
+               description,
+               cover,
+               doc_count,
+               view_count,
+               vote_count
+        from ebook
+        where id = #{id}
+    </select>
+
+    <select id="queryAllList" resultMap="EbookMap">
+        select id,
+               name,
+               category1_id,
+               category2_id,
+               description,
+               cover,
+               doc_count,
+               view_count,
+               vote_count
+        from ebook
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="EbookMap">
+        select
+        id, name, category1_id, category2_id, description, cover, doc_count, view_count, vote_count
+        from ebook
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="category1Id != null">
+                and category1_id = #{category1Id}
+            </if>
+            <if test="category2Id != null">
+                and category2_id = #{category2Id}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="cover != null and cover != ''">
+                and cover = #{cover}
+            </if>
+            <if test="docCount != null">
+                and doc_count = #{docCount}
+            </if>
+            <if test="viewCount != null">
+                and view_count = #{viewCount}
+            </if>
+            <if test="voteCount != null">
+                and vote_count = #{voteCount}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ebook
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="category1Id != null">
+                and category1_id = #{category1Id}
+            </if>
+            <if test="category2Id != null">
+                and category2_id = #{category2Id}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="cover != null and cover != ''">
+                and cover = #{cover}
+            </if>
+            <if test="docCount != null">
+                and doc_count = #{docCount}
+            </if>
+            <if test="viewCount != null">
+                and view_count = #{viewCount}
+            </if>
+            <if test="voteCount != null">
+                and vote_count = #{voteCount}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ebook(name, category1_id, category2_id, description, cover, doc_count, view_count, vote_count)
+        values (#{name}, #{category1Id}, #{category2Id}, #{description}, #{cover}, #{docCount}, #{viewCount},
+                #{voteCount})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ebook(name, category1_id, category2_id, description, cover, doc_count, view_count, vote_count)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.category1Id}, #{entity.category2Id}, #{entity.description}, #{entity.cover},
+            #{entity.docCount}, #{entity.viewCount}, #{entity.voteCount})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ebook(name, category1_id, category2_id, description, cover, doc_count, view_count, vote_count)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.category1Id}, #{entity.category2Id}, #{entity.description}, #{entity.cover},
+            #{entity.docCount}, #{entity.viewCount}, #{entity.voteCount})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        category1_id = values(category1_id),
+        category2_id = values(category2_id),
+        description = values(description),
+        cover = values(cover),
+        doc_count = values(doc_count),
+        view_count = values(view_count),
+        vote_count = values(vote_count)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ebook
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="category1Id != null">
+                category1_id = #{category1Id},
+            </if>
+            <if test="category2Id != null">
+                category2_id = #{category2Id},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="cover != null and cover != ''">
+                cover = #{cover},
+            </if>
+            <if test="docCount != null">
+                doc_count = #{docCount},
+            </if>
+            <if test="viewCount != null">
+                view_count = #{viewCount},
+            </if>
+            <if test="voteCount != null">
+                vote_count = #{voteCount},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from ebook
+        where id = #{id}
+    </delete>
+
+</mapper>
+
