@@ -3,7 +3,6 @@ package com.edmond.wiki.controller;
 import com.edmond.wiki.domain.Ebook;
 import com.edmond.wiki.resp.CommonResp;
 import com.edmond.wiki.service.EbookService;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/ebook")
 public class EbookController {
 
     private final EbookService ebookService;
@@ -20,7 +20,7 @@ public class EbookController {
     }
 
     @RequestMapping(value = "/bookList",method = RequestMethod.GET)
-    public CommonResp<List<Ebook>> queryBookList(@RequestBody Ebook ebook){
+    public CommonResp<List<Ebook>> queryBookList(Ebook ebook){
         CommonResp commonResp = new CommonResp();
         List<Ebook> ebooks = ebookService.queryAll(ebook);
         commonResp.setContent(ebooks);

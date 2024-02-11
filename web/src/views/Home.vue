@@ -52,11 +52,20 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
+import axios from 'axios'
 export default {
   name: 'Home',
   components: {
+  },
+  setup(){
+    axios.get("http://localhost:8880/ebook/bookList",{
+      params: {
+        name: 'Spring'
+      }
+    }).then((response) => {
+      console.log(response);
+    })
   }
+
 }
 </script>
