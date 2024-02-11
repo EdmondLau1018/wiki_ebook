@@ -46,25 +46,38 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
-      Content
+      <pre>
+        {{ebooks}}
+      </pre>
     </a-layout-content>
   </a-layout>
 </template>
 
 <script>
 import axios from 'axios'
+import {onMounted,ref,reactive,toRef} from "vue";
 export default {
   name: 'Home',
   components: {
   },
   setup(){
-    axios.get("http://localhost:8880/ebook/bookList",{
-      params: {
-        name: 'Spring'
-      }
-    }).then((response) => {
-      console.log(response);
-    })
+    onMounted(() => {
+      //  生命周期函数
+      console.log('onMounted:-----> 页面加载完成');
+      const ebooks  = ref();
+      axios.get("http://localhost:8880/ebook/bookList",{
+        params: {
+          name: 'Spring'
+        }
+      }).then((response) => {
+        console.log(response);
+        const data = response.data;
+        ebooks.value = data.content;
+      });
+      return {
+        ebooks
+      };
+    });
   }
 
 }
