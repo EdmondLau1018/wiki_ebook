@@ -47,6 +47,7 @@
     </a-layout-sider>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
       <pre>
+        content
         {{ebooks}}
       </pre>
     </a-layout-content>
